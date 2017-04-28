@@ -51,8 +51,10 @@ class Issues {
   // return an array containing all the `id` property of the `assignedIssue`
   // property for each issue with an `assignee` property that is not `null`
   get withAssignee() {
-    let assign = this.issues.filter(issue => !issue.assignee);
-    console.log(assign);
+    let assign = this.issues.filter(function(issue) {
+      return issue.assignee !== null;
+    });
+    return assign.map(issue => issue.id);
   }
 
   // return an array containing all the `id` property of the `assignedIssue`

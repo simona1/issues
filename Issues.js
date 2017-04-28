@@ -60,16 +60,40 @@ class Issues {
   // return an array containing all the `id` property of the `assignedIssue`
   // property for each issue with a `pull_request` property that is not `null`
   get withPullRequest() {
+    let pull_req = this.issues.filter(function(issue) {
+      return issue.pull_request !== undefined;
+    });
+    return pull_req.map(issue => issue.id);
   }
 
   // return the total number of comments for all the issues, based on the
   // `comments` property
   get totalComments() {
+    let comments =
+    this.issues.map(issue => issue.comments);
+    return comments.reduce(function(acc, val) {
+      return acc + val;
+    }, 0);
   }
 
   // Return the `login` property of the `user` property for the `user` that has
   // submitted the most issues
   get mostActiveUser() {
+    let loginIds = {};
+    let users = this.issues.map(issue => issue.user.login);
+    users.forEach(function(elem) {
+      loginIds[elem] = loginIds[elem] ? (loginIds[elem] + 1) : 1;
+    });
+    let findMax = 0;
+    let res = "";
+    let keys = Object.keys(loginIds);
+    keys.forEach(function(elem) {
+      if (loginIds[elem] >= findMax) {
+        findMax = loginIds[elem];
+        res = elem;
+      }
+    });
+    return res;
   }
 }
 
